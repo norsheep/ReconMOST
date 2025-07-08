@@ -16,11 +16,7 @@ This should install the `improved_diffusion` python package that the scripts dep
 
 ### Preparing Data
 
-The training code reads images from a directory of image files. In the [datasets](datasets) folder, we have provided instructions/scripts for preparing these directories for ImageNet, LSUN bedrooms, and CIFAR-10.
-
-For creating your own dataset, simply dump all of your images into a directory with ".jpg", ".jpeg", or ".png" extensions. If you wish to train a class-conditional model, name the files like "mylabel1_XXX.jpg", "mylabel2_YYY.jpg", etc., so that the data loader knows that "mylabel1" and "mylabel2" are the labels. Subdirectories will automatically be enumerated as well, so the images can be organized into a recursive structure (although the directory names will be ignored, and the underscore prefixes are used as names).
-
-The images will automatically be scaled and center-cropped by the data-loading pipeline. Simply pass `--data_dir path/to/images` to the training script, and it will take care of the rest.
+We use datasets CMIP6 and EN4. For creating and using your own datasets, please refer to improved_diffusion/image_datasets_v2.py. You only need to give the data-path when training and sampling.
 
 ### Training
 
@@ -35,7 +31,7 @@ export DIFFUSION_BLOB_LOGDIR=YOUR_SAVE_PATH
 python ./scripts/image_train_v2.py --data_dir $DATA_DIR $MODEL_FLAGS $DIFFUSION_FLAGS $TRAIN_FLAGS
 ```
 
-## Sampling
+### Sampling
 
 The above training script saves checkpoints to `.pt` files in the logging directory. These checkpoints will have names like `ema_0.9999_200000.pt` and `model200000.pt`. You will likely want to sample from the EMA models, since those produce much better samples.
 
@@ -57,3 +53,6 @@ MODEL_FLAGS="--image_size 32 --num_channels 128 --num_res_blocks 3 --learn_sigma
 DIFFUSION_FLAGS="--diffusion_steps 4000 --noise_schedule cosine --use_kl True"
 TRAIN_FLAGS="--lr 1e-4 --batch_size 128 --schedule_sampler loss-second-moment"
 ```
+## Reference
+
+This work is built upon [guided-diffusion](https://github.com/openai/guided-diffusion). Thanks to their awesome work.
